@@ -1,0 +1,14 @@
+# used for STM32CubeIDE Project
+
+
+makefile
+*.d
+*.o
+*.su
+*.elf
+*.bin
+*.hex
+*.mk
+*.list
+*.map
+
