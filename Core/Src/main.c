@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "tx_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +58,38 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+TX_THREAD thread1;
+TX_THREAD thread2;
+
+
+void thread1_entry(ULONG thread_input)
+{
+  while(1)
+  {
+    printf("threadx 1 running...\n");
+    /* Sleep for 1 tick. */
+    tx_thread_sleep(1000);
+  }
+}
+void thread2_entry(ULONG thread_input)
+{
+  while(1)
+  {
+    printf("threadx 2 running...\n");
+    /* Sleep for 1 tick. */
+    tx_thread_sleep(1000);
+  }
+}
+
+void tx_application_define(void *first_unused_memory)
+{
+  /* Create my_thread! */
+  tx_thread_create(&thread1, "Thread 1",
+  thread1_entry, 0x1234, first_unused_memory, 1024, 3, 3, TX_NO_TIME_SLICE, TX_AUTO_START);
+
+  tx_thread_create(&thread2, "Thread 2",
+  thread2_entry, 0x1234, first_unused_memory+1024, 1024, 1, 1, TX_NO_TIME_SLICE, TX_AUTO_START);
+}
 
 /* USER CODE END 0 */
 
@@ -91,6 +124,9 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  printf("\nSTM32CubeIDE v1.3.1 + STM32F407 + ThreadX v6.0\n\n");
+  /* Enter the ThreadX kernel. */
+  tx_kernel_enter( );
 
   /* USER CODE END 2 */
 
