@@ -32,6 +32,7 @@
 
 .global  g_pfnVectors
 .global  Default_Handler
+.global _vectors
 
 /* start address for the initialization values of the .data section. 
 defined in linker script */
@@ -123,6 +124,7 @@ Infinite_Loop:
     
     
 g_pfnVectors:
+_vectors:
   .word  _estack
   .word  Reset_Handler
   .word  NMI_Handler

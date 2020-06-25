@@ -34,8 +34,8 @@
 2. Project配置中增加ThreadX头文件路径。`Project Properties --> C/C++ Build --> Settings --> Tools Settings --> MCU GCC Compiler --> Include paths`。
 3. 注释掉STM32CubeIDE默认代码中的`PendSV_Handler()`和`SysTick_Handler()`，避免重复定义。为避免重新生成代码时注释被优化，将`#if 0`放置在`DebugMon_Handler()`的用户段0，将`#endif`放置在`SysTick_Handler()`的用户段1。
 4.  在 `STM32F407ZETX_FLASH.ld` 中的 `._user_heap_stack` 段定义 `__RAM_segment_used_end__`，其表示未使用RAM空间的起始地址，用于做动态分配。
-5. 删除 `tx_vector_table_sample.S`。该示例启动文件与默认启动文件 `startup_stm32f407zetx.s` 功能重复。
-6. 在 `startup_stm32f407zetx.`s 中定义全局变量 `_vectors`，其在 `tx_initialize_low_level_sample.S` 中被调用。
+5. 在 `startup_stm32f407zetx.`s 中定义全局变量 `_vectors`，其在 `tx_initialize_low_level_sample.S` 中被调用。
+6. 删除 `tx_vector_table_sample.S`。该示例启动文件与默认启动文件 `startup_stm32f407zetx.s` 功能重复。
 7. 修改时钟频率。
 
 
