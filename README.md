@@ -17,8 +17,8 @@
 
 相较于 FreeRTOS 等国内使用较多的 RTOS 而言，除了后发（FreeRTOS 早期即开源，在 2017 年被亚马逊收购并修改为 MIT授权）的劣势，ThreadX 具有2方面的优势：
 
-1. 拥有丰富的多行业认证。FreeRTOS 的改进版（由第三方重写） SafeRTOS 才提供部分行业认证。参考资料 [The Top 10 Pitfalls of Embedded Open Source Software](https://rtos.com/wp-content/uploads/2018/01/EL_Pitfalls_of_Open_Source_Software.pdf)
-2. 拥有丰富的中间件，如网络、文件系统、GUI、USB等，集成时能提供一致的体验。如果使用 FreeRTOS，需手动集成FatFs、LwIP第三方的中间件。
+1. 拥有丰富的多行业认证。FreeRTOS 的改进版（由第三方重写） SafeRTOS 才提供部分行业认证。
+2. 拥有丰富的中间件，如网络、文件系统、GUI、USB等，集成时能提供一致的体验。如果使用 FreeRTOS，需手动集成FatFs、LwIP等第三方中间件。
 
 
 
@@ -43,6 +43,8 @@
 
 
 ### 参考资料
+
+[The Top 10 Pitfalls of Embedded Open Source Software](https://rtos.com/wp-content/uploads/2018/01/EL_Pitfalls_of_Open_Source_Software.pdf)
 
 [首发从搭建环境开始，教你如何在小熊派上跑起来ThreadX操作系统！](https://www.codenong.com/cs106388532/)
 
