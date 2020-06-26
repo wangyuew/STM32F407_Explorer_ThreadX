@@ -26,29 +26,37 @@
  */
 
 /* Entry Point */
+/* 程序入口。程序将从Reset Handler开始执行，而该函数定义在stm32fxxx.s启动文件中。 */
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
+/* end of stack 堆栈末尾 = RAM起始地址 + RAM空间大小 */
 _estack = ORIGIN(RAM) + LENGTH(RAM);	/* end of "RAM" Ram type memory */
 
+/* 程序所必须的堆、栈空间大小定义。 */
+/* STM32CubeMX --> Project Manager --> Project --> Linker Settings */
 _Min_Heap_Size = 0x200;	/* required amount of heap  */
 _Min_Stack_Size = 0x400;	/* required amount of stack */
 
 /* Memories definition */
+/* CCMRAM RAM FLASH 起始位置和大小的声明 */
 MEMORY
 {
-  CCMRAM    (xrw)    : ORIGIN = 0x10000000,   LENGTH = 64K
-  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
-  FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 512K
+  CCMRAM  (xrw)    : ORIGIN = 0x10000000,   LENGTH = 64K
+  RAM     (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
+  FLASH    (rx)    : ORIGIN = 0x08000000,   LENGTH = 512K
 }
 
 /* Sections */
 SECTIONS
 {
   /* The startup code into "FLASH" Rom type memory */
+  /* 中断向量表定义于 .s启动文件中，应位于Flash的最前端，也就是从0x8000000的位置开始 */
   .isr_vector :
   {
     . = ALIGN(4);
+    /* 将中断向量的内容链接到该地址 */
+    /* KEEP() 的作用是当启用连接器的--gc-sections垃圾回收选项时，这部分不能被回收 */
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
@@ -67,6 +75,7 @@ SECTIONS
     KEEP (*(.fini))
 
     . = ALIGN(4);
+    /* end of text 是链接器的预定义变量，代表程序正文段结束的第一个地址 */
     _etext = .;        /* define a global symbols at end of code */
   } >FLASH
 
@@ -79,12 +88,12 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
-  .ARM.extab   : { 
+  .ARM.extab   : {
     . = ALIGN(4);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(4);
   } >FLASH
-  
+
   .ARM : {
     . = ALIGN(4);
     __exidx_start = .;
@@ -93,6 +102,8 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+  /* .preinit_array和.init_array部分包含指向将在初始化时调用的函数的指针数组。 */
+  /* https://stackoverflow.com/questions/40532180/understanding-the-linkerscript-for-an-arm-cortex-m-microcontroller */
   .preinit_array     :
   {
     . = ALIGN(4);
@@ -101,7 +112,7 @@ SECTIONS
     PROVIDE_HIDDEN (__preinit_array_end = .);
     . = ALIGN(4);
   } >FLASH
-  
+
   .init_array :
   {
     . = ALIGN(4);
@@ -111,7 +122,7 @@ SECTIONS
     PROVIDE_HIDDEN (__init_array_end = .);
     . = ALIGN(4);
   } >FLASH
-  
+
   .fini_array :
   {
     . = ALIGN(4);
@@ -123,10 +134,11 @@ SECTIONS
   } >FLASH
 
   /* Used by the startup to initialize data */
+  /* 以变量_sidata存储.data块的起始地址，.data对应初始化了的全局变量 */
   _sidata = LOADADDR(.data);
 
   /* Initialized data sections into "RAM" Ram type memory */
-  .data : 
+  .data :
   {
     . = ALIGN(4);
     _sdata = .;        /* create a global symbol at data start */
@@ -135,7 +147,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-    
+
   } >RAM AT> FLASH
 
   /* Uninitialized data section into "RAM" Ram type memory */
@@ -163,6 +175,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
+    /* start of unused RAM space */
     __RAM_segment_used_end__ = .;
   } >RAM
 
